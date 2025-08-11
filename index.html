@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Ibiza Trip Planner — 24–28 Agosto (2 persone)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+<style>
+  :root{
+    --bg:#0b1220; --panel:#0f172a; --muted:#9ca3af; --border:#243049; --text:#e5e7eb;
+    /* colori giorni */
+    --d1:#16a34a; --d2:#2563eb; --d3:#f97316; --d4:#a855f7;
+    /* categorie */
+    --park:#14b8a6; --club:#f43f5e; --sun:#f59e0b; --bus:#38bdf8;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  a{color:#7dd3fc} .muted{color:var(--muted);font-size:12px}
+  header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
+  .wrap{max-width:1120px;margin:0 auto;padding:14px 16px}
+  h1{font-size:20px;margin:0} h2{font-size:20px;margin:16px 0 8px}
+  section{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin:14px 0}
+  .badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:12px;color:#e2e8f0;margin-left:6px}
+  .cost{display:inline-block;border:1px solid var(--border);border-radius:8px;padding:0 8px;font-size:12px;margin-left:8px}
+  .table{width:100%;border-collapse:collapse} .table th,.table td{border:1px solid var(--border);padding:8px} .table th{background:#111827;text-align:left}
+  #map{height:60vh;min-height:420px;border-radius:12px;border:1px solid var(--border)}
+  .legend,.legend-days{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+  .key{display:flex;align-items:center;gap:6px} .dot{width:12px;height:12px;border-radius:3px;border:2px solid #0f172a}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:1000px){.grid{grid-template-columns:2fr 1fr}}
+  .list{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:12px;padding:10px;background:#0b1220}
+  .item{border-bottom:1px solid var(--border);padding:8px 0} .item:last-child{border-bottom:0}
+  .p-name{font-weight:700}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Ibiza Trip Planner · 24–28 Agosto · 2 persone</h1></div></header>
+<div class="wrap">
+
+<!-- ===================== ITINERARIO CON COSTI DETTAGLIATI ===================== -->
+<section id="itinerary">
+  <h2>Itinerario economico (09:00→13:00 spiagge — 15:00→01:00 attività)</h2>
+  <div class="muted">Assunzioni: Scooter Liberty 125 (70kg + 50kg), consumo 3,0 L/100 km, benzina €1,85/L; Discobus A/R 2 pax ≈ €16; Swag ~€25 p.p.; Ushuaïa ~€60 p.p.; Jetski 30’ 2 pax ≈ €130.</div>
+
+  <!-- Giorno 1 -->
+  <h3>Dom 24/08 — West cluster
+      <span class="cost">Totale stimato per 2: €23,22</span></h3>
+  <table class="table">
+    <tr><th>Ora</th><th>Attività</th><th>Costo stimato</th></tr>
+    <tr><td>09:00</td><td>Cala Salada — spiaggia libera (parcheggio free)</td><td>€0,44 benzina</td></tr>
+    <tr><td>10:00</td><td>Cala Bassa — spiaggia libera</td><td>€0,44 benzina</td></tr>
+    <tr><td>11:00</td><td>Cala Comte (Cala Conta) — spiaggia libera</td><td>€0,44 benzina</td></tr>
+    <tr><td>12:00</td><td>Cala Tarida — spiaggia libera</td><td>€0,44 benzina</td></tr>
+    <tr><td>15:00</td><td>Relax/piscina</td><td>€0,00</td></tr>
+    <tr><td>19:45</td><td>Tramonto: Sunset Strip / Punta Galera (gratuito)</td><td>€0,00</td></tr>
+    <tr><td>22:00</td><td>Drink economici (2 birre)</td><td>€10,00</td></tr>
+    <tr><td></td><td>Quota spesa giorno</td><td>€9,00</td></tr>
+    <tr><td></td><td>Ghiaccio/extra</td><td>€2,00</td></tr>
+    <tr><td></td><td><b>Carburante (≈40 km)</b></td><td><b>€2,22</b></td></tr>
+  </table>
+
+  <!-- Giorno 2 -->
+  <h3>Lun 25/08 — Sud & Ibiza Town (sera SWAG)
+      <span class="cost">Totale stimato per 2: €80,11</span></h3>
+  <table class="table">
+    <tr><th>Ora</th><th>Attività</th><th>Costo stimato</th></tr>
+    <tr><td>09:00</td><td>Es Cavallet — spiaggia libera</td><td>€0,62 benzina</td></tr>
+    <tr><td>10:00</td><td>Las Salinas — spiaggia libera</td><td>€0,62 benzina</td></tr>
+    <tr><td>11:00</td><td>Playa d’en Bossa — spiaggia libera</td><td>€0,62 benzina</td></tr>
+    <tr><td>12:00</td><td>Talamanca — spiaggia libera</td><td>€0,62 benzina</td></tr>
+    <tr><td>15:00</td><td>Merenda/siesta (quota spesa)</td><td>€4,50</td></tr>
+    <tr><td>18:30</td><td>Discobus D3 A/R (2 pax) → Playa d’en Bossa</td><td>€16,00</td></tr>
+    <tr><td>23:00</td><td>Serata **Swag** (2 biglietti, stima)</td><td>€50,00</td></tr>
+    <tr><td></td><td>Quota spesa restante (cena)</td><td>€4,50</td></tr>
+    <tr><td></td><td>Ghiaccio/extra</td><td>€2,00</td></tr>
+    <tr><td></td><td><b>Carburante (≈56 km)</b></td><td><b>€3,11</b></td></tr>
+  </table>
+
+  <!-- Giorno 3 -->
+  <h3>Mar 26/08 — Est & Nord-Est (sera **Ushuaïa** — solo costi)
+      <span class="cost">Totale stimato per 2: €149,78</span></h3>
+  <table class="table">
+    <tr><th>Ora</th><th>Attività</th><th>Costo stimato</th></tr>
+    <tr><td>09:00</td><td>Cala Llonga — spiaggia libera</td><td>€0,56 benzina</td></tr>
+    <tr><td>10:00</td><td>Cala Olivera — spiaggia libera</td><td>€0,56 benzina</td></tr>
+    <tr><td>11:00</td><td>Cala Nova — spiaggia libera</td><td>€0,56 benzina</td></tr>
+    <tr><td>12:00</td><td>Cala Llenya — spiaggia libera</td><td>€0,56 benzina</td></tr>
+    <tr><td>15:00</td><td>Riposo/preparazione (nessun dettaglio serale)</td><td>€0,00</td></tr>
+    <tr><td></td><td>**Ushuaïa** (2 biglietti, stima) + Discobus A/R (2 pax)</td><td>€136,00</td></tr>
+    <tr><td></td><td>Quota spesa giorno</td><td>€9,00</td></tr>
+    <tr><td></td><td>Ghiaccio/extra</td><td>€2,00</td></tr>
+    <tr><td></td><td><b>Carburante (≈50 km)</b></td><td><b>€2,78</b></td></tr>
+  </table>
+
+  <!-- Giorno 4 -->
+  <h3>Mer 27/08 — Nord (con **Jetski**)
+      <span class="cost">Totale stimato per 2: €145,05</span></h3>
+  <table class="table">
+    <tr><th>Ora</th><th>Attività</th><th>Costo stimato</th></tr>
+    <tr><td>09:00</td><td>Cala San Miguel (Port de Sant Miquel) — spiaggia libera</td><td>€0,81 benzina</td></tr>
+    <tr><td>10:00</td><td>Cala San Vicente — spiaggia libera</td><td>€0,81 benzina</td></tr>
+    <tr><td>11:00</td><td>Agua Blanca — spiaggia libera</td><td>€0,81 benzina</td></tr>
+    <tr><td>12:00</td><td>S’Arenal de Sant Antoni — spiaggia libera</td><td>€0,81 benzina</td></tr>
+    <tr><td>15:00</td><td>Passeggiata Port de Sant Antoni</td><td>€0,00</td></tr>
+    <tr><td>16:30</td><td>**Jetski 30’ (1 moto / 2 pax) — San Antonio**</td><td>€130,00</td></tr>
+    <tr><td>19:45</td><td>Tramonto: **Punta Galera** (gratuito)</td><td>€0,00</td></tr>
+    <tr><td>21:30</td><td>Cena casalinga (quota spesa)</td><td>€9,00</td></tr>
+    <tr><td></td><td>Ghiaccio/extra</td><td>€2,00</td></tr>
+    <tr><td></td><td><b>Carburante (≈73 km)</b></td><td><b>€4,05</b></td></tr>
+  </table>
+
+  <div class="muted">Note: costi indicativi; i biglietti e il Discobus possono variare leggermente in loco.</div>
+</section>
+
+<!-- ===================== MAPPA CON PIN COLORATI E LINK ===================== -->
+<section id="mapsec">
+  <h2>Mappa interattiva con pin colorati per giornata</h2>
+  <div class="legend-days">
+    <div class="key"><span class="dot" style="background:var(--d1)"></span> Giorno 1 (Ovest)</div>
+    <div class="key"><span class="dot" style="background:var(--d2)"></span> Giorno 2 (Sud/IBZ)</div>
+    <div class="key"><span class="dot" style="background:var(--d3)"></span> Giorno 3 (Est/NE)</div>
+    <div class="key"><span class="dot" style="background:var(--d4)"></span> Giorno 4 (Nord)</div>
+    <div class="key"><span class="dot" style="background:var(--park)"></span> Parcheggi</div>
+    <div class="key"><span class="dot" style="background:var(--club)"></span> Club</div>
+    <div class="key"><span class="dot" style="background:var(--sun)"></span> Tramonti</div>
+    <div class="key"><span class="dot" style="background:var(--bus)"></span> Fermate bus</div>
+  </div>
+  <div class="grid">
+    <div id="map"></div>
+    <div class="list" id="list"></div>
+  </div>
+  <div class="muted">Suggerimento: tocca un pin per il nome; usa i link nella lista per aprire <b>Apple Maps</b> (iPhone) o Google Maps.</div>
+</section>
+
+<!-- ===================== LINK RAPIDI ===================== -->
+<section id="links">
+  <h2>Link rapidi utili</h2>
+  <p>
+    <a href="https://ibiza.tib.org/it/web/cie/autobus/linia/10" target="_blank" rel="noopener">TIB L10 Aeroporto↔Eivissa</a> ·
+    <a href="https://discobusibiza.com/" target="_blank" rel="noopener">Discobus D3/D3B (estate)</a> ·
+    <a href="https://swagibizaoficial.com/" target="_blank" rel="noopener">Swag</a> ·
+    <a href="https://www.theushuaiaexperience.com/en" target="_blank" rel="noopener">Ushuaïa</a> ·
+    <a href="https://www.ibiza-spotlight.com/activity/ibiza-jet-ski-san-antonio" target="_blank" rel="noopener">Jetski San Antonio</a>
+  </p>
+</section>
+
+<footer><div class="wrap muted">Ottimizzato per iPhone/desktop • Funziona offline (la mappa richiede rete per le tile) • Pin e colori per giornata</div></footer>
+
+<script>
+  // --------- DATI LUOGHI (lat,lon) ---------
+  // [key, nome, lat, lon, categoria]
+  var PLACES = [
+    // Spiagge (lista completa + Cala Olivera)
+    ["cala_salada","Cala Salada",39.009703,1.299186,"beach"],
+    ["cala_vedella","Cala Vedella",38.913060,1.223890,"beach"],
+    ["cala_nova","Cala Nova",39.014900,1.596700,"beach"],
+    ["cala_san_miguel","Cala San Miguel (Port de Sant Miquel)",39.078700,1.439000,"beach"],
+    ["cala_tarida","Cala Tarida",38.941500,1.227200,"beach"],
+    ["cala_llenya","Cala Llenya",39.011900,1.597900,"beach"],
+    ["cala_llonga","Cala Llonga",38.947900,1.529800,"beach"],
+    ["cala_comte","Cala Comte (Cala Conta)",38.962345,1.220137,"beach"],
+    ["agua_blanca","Agua Blanca (Aigües Blanques)",39.045900,1.608500,"beach"],
+    ["cala_bassa","Cala Bassa",38.967550,1.241669,"beach"],
+    ["es_cavallet","Es Cavallet",38.841500,1.415400,"beach"],
+    ["las_salinas","Las Salinas (Ses Salines)",38.827700,1.404400,"beach"],
+    ["playa_bossa","Playa d’en Bossa",38.886900,1.411600,"beach"],
+    ["s_arenal","S’Arenal de Sant Antoni",38.978800,1.304600,"beach"],
+    ["cala_san_vicente","Cala San Vicente",39.102500,1.611700,"beach"],
+    ["talamanca","Spiaggia di Talamanca",38.916600,1.455600,"beach"],
+    ["cala_olivera","Cala Olivera",38.936700,1.498800,"beach"],
+    // Club
+    ["swag","Swag Ibiza",38.885700,1.405800,"club"],
+    ["ushuaia","Ushuaïa Ibiza",38.885000,1.406500,"club"],
+    // Bus
+    ["bus_sant_antoni","Estació d'Autobusos Sant Antoni",38.981320,1.306430,"bus"],
+    ["bus_hi","Fermata Hï/Ushuaïa (Discobus)",38.885036,1.404048,"bus"],
+    // Tramonti
+    ["sunset_strip","Sunset Strip (Café del Mar)",38.975000,1.298900,"sunset"],
+    ["punta_galera","Punta Galera (tramonto)",39.004900,1.282200,"sunset"],
+    // Parcheggi gratuiti (vicini alle spiagge)
+    ["pk_comte","Parcheggio gratuito - Cala Comte",38.963900,1.222000,"parking"],
+    ["pk_bassa","Parcheggio gratuito - Cala Bassa",38.966900,1.244200,"parking"],
+    ["pk_salada","Parcheggio gratuito - Cala Salada",39.011200,1.297300,"parking"],
+    ["pk_vadella","Parcheggio gratuito - Cala Vedella",38.914600,1.224800,"parking"],
+    ["pk_tarida","Parcheggio gratuito - Cala Tarida",38.939400,1.228800,"parking"],
+    ["pk_nova","Parcheggio gratuito - Cala Nova",39.015900,1.598500,"parking"],
+    ["pk_llenya","Parcheggio gratuito - Cala Llenya",39.012400,1.600600,"parking"],
+    ["pk_llonga","Parcheggio gratuito - Cala Llonga",38.947200,1.532900,"parking"],
+    ["pk_olivera","Parcheggio gratuito - Cala Olivera",38.935500,1.497300,"parking"],
+    ["pk_cavallet","Parcheggio gratuito - Es Cavallet",38.839900,1.410900,"parking"],
+    ["pk_salinas","Parcheggio gratuito - Las Salinas",38.826800,1.404000,"parking"],
+    ["pk_bossa","Parcheggio gratuito - Playa d’en Bossa",38.885900,1.409900,"parking"],
+    ["pk_talamanca","Parcheggio gratuito - Talamanca",38.914900,1.451900,"parking"],
+    ["pk_miguel","Parcheggio gratuito - Port de Sant Miquel",39.077900,1.438000,"parking"],
+    ["pk_vicente","Parcheggio gratuito - Cala San Vicente",39.101600,1.610300,"parking"],
+    ["pk_agua","Parcheggio gratuito - Agua Blanca",39.046900,1.606600,"parking"],
+    ["pk_s_arenal","Parcheggio gratuito - S’Arenal Sant Antoni",38.978300,1.303100,"parking"]
+  ];
+
+  // Assegnazione spiagge ai giorni (09–13, 1h ciascuna)
+  var DAY_PLAN = {
+    1: ["cala_salada","cala_bassa","cala_comte","cala_tarida"],
+    2: ["es_cavallet","las_salinas","playa_bossa","talamanca"],
+    3: ["cala_llonga","cala_olivera","cala_nova","cala_llenya"],
+    4: ["cala_san_miguel","cala_san_vicente","agua_blanca","s_arenal"]
+  };
+
+  // Colori
+  var COL = {d1:'#16a34a', d2:'#2563eb', d3:'#f97316', d4:'#a855f7', park:'#14b8a6', club:'#f43f5e', sun:'#f59e0b', bus:'#38bdf8'};
+
+  // Mappa
+  var map = L.map('map', {zoomControl:true}).setView([38.97,1.32], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'&copy; OpenStreetMap'}).addTo(map);
+
+  function dayOf(key){
+    for (var d in DAY_PLAN){ if (DAY_PLAN[d].indexOf(key)>=0) return parseInt(d); }
+    return null;
+  }
+  function colorFor(key, cat){
+    var d = dayOf(key);
+    if (d===1) return COL.d1; if (d===2) return COL.d2; if (d===3) return COL.d3; if (d===4) return COL.d4;
+    if (cat==='parking') return COL.park; if (cat==='club') return COL.club; if (cat==='sunset') return COL.sun; return COL.bus;
+  }
+  function appleLink(name, lat, lon){ return 'https://maps.apple.com/?q='+encodeURIComponent(name)+'&ll='+lat+','+lon; }
+  function googleLink(lat, lon){ return 'https://www.google.com/maps/search/?api=1&query='+lat+','+lon; }
+
+  // Marker + lista
+  var bounds=[], list = document.getElementById('list');
+  for (var i=0;i<PLACES.length;i++){
+    var p = PLACES[i], key=p[0], name=p[1], lat=p[2], lon=p[3], cat=p[4];
+    var col = colorFor(key, cat);
+    var m = L.circleMarker([lat,lon], {radius:8,color:col,weight:2,fillColor:col,fillOpacity:.9}).addTo(map).bindPopup('<b>'+name+'</b>');
+    bounds.push([lat,lon]);
+
+    var item = document.createElement('div'); item.className='item';
+    item.innerHTML = '<div class="p-name" style="color:'+col+'">'+name+'</div>'+
+                     '<div class="muted">'+cat+(dayOf(key)?' · Giorno '+dayOf(key):'')+' · '+
+                     lat.toFixed(5)+', '+lon.toFixed(5)+'</div>'+
+                     '<div><a href="'+appleLink(name,lat,lon)+'">Apple Maps</a> · '+
+                     '<a href="'+googleLink(lat,lon)+'" target="_blank" rel="noopener">Google Maps</a></div>';
+    list.appendChild(item);
+  }
+  if (bounds.length){ map.fitBounds(bounds,{padding:[28,28]}); }
+</script>
+</div>
+</body>
+</html>
